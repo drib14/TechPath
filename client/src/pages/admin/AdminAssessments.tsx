@@ -10,7 +10,9 @@ import { adminService } from '../../services/admin.service';
 import type { Assessment, Lesson, AssessmentQuestion } from '../../types';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { Select } from '../../components/ui/Select';
 import { useToast } from '../../components/ui/Toast';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
 
 export const AdminAssessments: React.FC = () => {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
@@ -228,10 +230,7 @@ export const AdminAssessments: React.FC = () => {
       {/* Table / List */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading assessments...
-          </div>
+          <SkeletonAdminTable rows={6} cols={5} />
         ) : assessments.length === 0 ? (
           <div className="p-12 text-center text-surface-400">
             No assessments found. Click "Create Assessment" to add a quiz to a lesson.

@@ -9,6 +9,7 @@ import { SafeImage } from '../components/ui/SafeImage';
 import { SkeletonGrid, SkeletonLessonContent } from '../components/ui/Skeleton';
 import { ErrorState } from '../components/ui/ErrorState';
 import { EmptyState } from '../components/ui/EmptyState';
+import { DynamicIcon } from '../components/ui/DynamicIcon';
 import type { Domain } from '../types';
 
 const difficultyColors = {
@@ -55,9 +56,14 @@ export const TechnologyDetail: React.FC = () => {
         <span className="text-surface-900 font-medium">{tech.name}</span>
       </nav>
 
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-surface-900 mb-3">{tech.name}</h1>
-        <p className="text-lg text-surface-500">{tech.description}</p>
+      <div className="mb-10 flex items-start gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600 flex-shrink-0 shadow-sm mt-1">
+          <DynamicIcon name={tech.icon} className="w-7 h-7" fallback="Cpu" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-surface-900 mb-2">{tech.name}</h1>
+          <p className="text-lg text-surface-500">{tech.description}</p>
+        </div>
       </div>
 
       <h2 className="text-xl font-semibold text-surface-900 mb-6">Available Courses</h2>

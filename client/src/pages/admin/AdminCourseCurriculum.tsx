@@ -289,9 +289,19 @@ export const AdminCourseCurriculum: React.FC = () => {
 
       {/* Curriculum Modules Tree */}
       {isLoading ? (
-        <div className="p-12 text-center text-surface-400 bg-surface-900 border border-surface-800 rounded-2xl">
-          <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-          Loading course curriculum...
+        <div className="space-y-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-surface-900 border border-surface-800 rounded-2xl p-6 animate-pulse space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="h-5 bg-surface-800 rounded w-48" />
+                <div className="h-7 bg-surface-800 rounded w-24" />
+              </div>
+              <div className="space-y-2 pl-4 border-l border-surface-800">
+                <div className="h-10 bg-surface-950/60 rounded-xl" />
+                <div className="h-10 bg-surface-950/60 rounded-xl" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : modules.length === 0 ? (
         <div className="p-12 text-center bg-surface-900 border border-surface-800 rounded-2xl text-surface-400">

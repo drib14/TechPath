@@ -166,8 +166,15 @@ export const AdminLessonEditor: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-10 h-10 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin" />
+      <div className="space-y-6 animate-fade-in pb-16">
+        <div className="h-20 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="h-40 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+            <div className="h-56 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+          </div>
+          <div className="h-96 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+        </div>
       </div>
     );
   }

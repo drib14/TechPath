@@ -9,6 +9,7 @@ const router = Router();
 router.get('/course/:courseId', ModuleController.getByCourse);
 
 export const moduleAdminRouter = Router();
+moduleAdminRouter.get('/course/:courseId', ModuleController.getByCourse);
 moduleAdminRouter.post('/', validate(createModuleSchema), ModuleController.create);
 moduleAdminRouter.patch('/:id', validate(updateModuleSchema), ModuleController.update);
 moduleAdminRouter.delete('/:id', ModuleController.delete);

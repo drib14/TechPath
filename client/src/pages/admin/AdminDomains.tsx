@@ -7,6 +7,8 @@ import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { Select } from '../../components/ui/Select';
 import { useToast } from '../../components/ui/Toast';
+import { DynamicIcon } from '../../components/ui/DynamicIcon';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
 
 export const AdminDomains: React.FC = () => {
   const [domains, setDomains] = useState<Domain[]>([]);
@@ -168,10 +170,7 @@ export const AdminDomains: React.FC = () => {
       {/* Table Container */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading domains...
-          </div>
+          <SkeletonAdminTable rows={5} cols={5} />
         ) : domains.length === 0 ? (
           <div className="p-12 text-center text-surface-400">
             No domains found. Click "Create Domain" to start adding educational fields.
@@ -212,8 +211,8 @@ export const AdminDomains: React.FC = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm">
-                          {domain.icon || domain.name.charAt(0)}
+                        <div className="w-10 h-10 rounded-xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-400">
+                          <DynamicIcon name={domain.icon} className="w-5 h-5" fallback="Layers" />
                         </div>
                         <div>
                           <span className="font-semibold text-white">{domain.name}</span>
@@ -295,15 +294,20 @@ export const AdminDomains: React.FC = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-surface-300 mb-1.5">
-                Icon Identifier
+                Icon Identifier / Lucide Name
               </label>
-              <input
-                type="text"
-                value={icon}
-                onChange={(e) => setIcon(e.target.value)}
-                placeholder="e.g. Code, Cloud, Shield"
-                className="w-full px-3.5 py-2.5 text-sm bg-surface-950 border border-surface-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={icon}
+                  onChange={(e) => setIcon(e.target.value)}
+                  placeholder="Globe, Shield, Cloud, Brain..."
+                  className="w-full px-3.5 py-2.5 text-sm bg-surface-950 border border-surface-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+                <div className="w-10 h-10 rounded-xl bg-surface-800 border border-surface-700 flex items-center justify-center text-primary-400 flex-shrink-0">
+                  <DynamicIcon name={icon} className="w-5 h-5" fallback="Layers" />
+                </div>
+              </div>
             </div>
           </div>
 

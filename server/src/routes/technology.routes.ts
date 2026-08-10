@@ -12,6 +12,7 @@ router.get('/domain/:domainId', TechnologyController.getByDomain);
 
 export const technologyAdminRouter = Router();
 technologyAdminRouter.get('/', TechnologyController.adminGetAll);
+technologyAdminRouter.get('/domain/:domainId', TechnologyController.getByDomain);
 technologyAdminRouter.post('/', validate(createTechnologySchema), TechnologyController.create);
 technologyAdminRouter.patch('/:id', validate(updateTechnologySchema), TechnologyController.update);
 technologyAdminRouter.delete('/:id', TechnologyController.delete);

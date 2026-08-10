@@ -19,6 +19,7 @@ import type { AdminDashboardData } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { SkeletonAdminStats } from '../../components/ui/Skeleton';
 
 export const AdminDashboard: React.FC = () => {
   const [data, setData] = useState<AdminDashboardData | null>(null);
@@ -42,8 +43,13 @@ export const AdminDashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-10 h-10 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin" />
+      <div className="space-y-8 animate-fade-in">
+        <div className="h-28 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+        <SkeletonAdminStats />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-64 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+          <div className="h-64 rounded-2xl bg-surface-900 border border-surface-800 animate-pulse" />
+        </div>
       </div>
     );
   }

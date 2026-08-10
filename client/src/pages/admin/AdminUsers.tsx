@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
 
 export const AdminUsers: React.FC = () => {
   const { user: currentAdmin } = useAuth();
@@ -118,10 +119,7 @@ export const AdminUsers: React.FC = () => {
       {/* Users Table */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading user directory...
-          </div>
+          <SkeletonAdminTable rows={6} cols={4} />
         ) : users.length === 0 ? (
           <div className="p-12 text-center text-surface-400">No users match your criteria.</div>
         ) : (

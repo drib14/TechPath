@@ -7,6 +7,8 @@ import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { Select } from '../../components/ui/Select';
 import { useToast } from '../../components/ui/Toast';
+import { DynamicIcon } from '../../components/ui/DynamicIcon';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
 
 export const AdminTechnologies: React.FC = () => {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
@@ -215,10 +217,7 @@ export const AdminTechnologies: React.FC = () => {
       {/* Table Container */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading technologies...
-          </div>
+          <SkeletonAdminTable rows={6} cols={6} />
         ) : filteredTechnologies.length === 0 ? (
           <div className="p-12 text-center text-surface-400">
             No technologies found. Click "Create Technology" to get started.
@@ -260,8 +259,8 @@ export const AdminTechnologies: React.FC = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">
-                          {tech.icon || tech.name.charAt(0)}
+                        <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                          <DynamicIcon name={tech.icon} className="w-5 h-5" fallback="Cpu" />
                         </div>
                         <div>
                           <span className="font-semibold text-white">{tech.name}</span>
@@ -355,15 +354,20 @@ export const AdminTechnologies: React.FC = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-surface-300 mb-1.5">
-                Icon / Symbol
+                Icon / Symbol / Brand
               </label>
-              <input
-                type="text"
-                value={icon}
-                onChange={(e) => setIcon(e.target.value)}
-                placeholder="e.g. Docker, Python"
-                className="w-full px-3.5 py-2.5 text-sm bg-surface-950 border border-surface-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={icon}
+                  onChange={(e) => setIcon(e.target.value)}
+                  placeholder="e.g. Docker, React, Python, Code2..."
+                  className="w-full px-3.5 py-2.5 text-sm bg-surface-950 border border-surface-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+                <div className="w-10 h-10 rounded-xl bg-surface-800 border border-surface-700 flex items-center justify-center text-cyan-400 flex-shrink-0">
+                  <DynamicIcon name={icon} className="w-5 h-5" fallback="Cpu" />
+                </div>
+              </div>
             </div>
           </div>
 

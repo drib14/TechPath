@@ -5,6 +5,7 @@ import type { AuditLog, PaginationMeta } from '../../types';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { useToast } from '../../components/ui/Toast';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
 
 export const AdminAuditLogs: React.FC = () => {
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -122,10 +123,7 @@ export const AdminAuditLogs: React.FC = () => {
       {/* Logs Table */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading security logs...
-          </div>
+          <SkeletonAdminTable rows={7} cols={6} />
         ) : logs.length === 0 ? (
           <div className="p-12 text-center text-surface-400">No audit log records found.</div>
         ) : (

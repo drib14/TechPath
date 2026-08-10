@@ -7,6 +7,7 @@ import { courseAdminRouter } from './course.routes';
 import { moduleAdminRouter } from './module.routes';
 import { lessonAdminRouter } from './lesson.routes';
 import { assessmentAdminRouter } from './assessment.routes';
+import { exerciseAdminRouter } from './exercise.routes';
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.use('/courses', courseAdminRouter);
 router.use('/modules', moduleAdminRouter);
 router.use('/lessons', lessonAdminRouter);
 router.use('/assessments', assessmentAdminRouter);
+router.use('/exercises', exerciseAdminRouter);
 
 export default router;

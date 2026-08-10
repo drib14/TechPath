@@ -12,6 +12,7 @@ router.get('/technology/:technologyId', CourseController.getByTechnology);
 
 export const courseAdminRouter = Router();
 courseAdminRouter.get('/', CourseController.adminGetAll);
+courseAdminRouter.get('/technology/:technologyId', CourseController.getByTechnology);
 courseAdminRouter.post('/', validate(createCourseSchema), CourseController.create);
 courseAdminRouter.patch('/:id', validate(updateCourseSchema), CourseController.update);
 courseAdminRouter.delete('/:id', CourseController.delete);

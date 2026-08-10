@@ -23,7 +23,13 @@ export class AdminController {
       const role = req.query.role as string;
 
       const result = await AdminService.getUsers({ page, limit, search, role });
-      ApiResponse.success(res, result.users, undefined, result.pagination);
+      ApiResponse.paginated(
+        res,
+        result.users,
+        result.pagination.total,
+        result.pagination.page,
+        result.pagination.limit
+      );
     } catch (error) {
       next(error);
     }
@@ -63,7 +69,13 @@ export class AdminController {
       const resourceType = req.query.resourceType as string;
 
       const result = await AuditService.getLogs({ page, limit, action, resourceType });
-      ApiResponse.success(res, result.logs, undefined, result.pagination);
+      ApiResponse.paginated(
+        res,
+        result.logs,
+        result.pagination.total,
+        result.pagination.page,
+        result.pagination.limit
+      );
     } catch (error) {
       next(error);
     }

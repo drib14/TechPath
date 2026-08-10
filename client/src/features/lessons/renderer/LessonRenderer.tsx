@@ -9,6 +9,8 @@ import { TipBlock } from './blocks/TipBlock';
 import { WarningBlock } from './blocks/WarningBlock';
 import { NoteBlock } from './blocks/NoteBlock';
 import { ExampleBlock } from './blocks/ExampleBlock';
+import { ExerciseBlock } from './blocks/ExerciseBlock';
+import { AssessmentBlock } from './blocks/AssessmentBlock';
 
 interface LessonRendererProps {
   content: ContentBlock[];
@@ -24,6 +26,8 @@ const blockComponents: Record<string, React.FC<{ block: ContentBlock }>> = {
   warning: WarningBlock,
   note: NoteBlock,
   example: ExampleBlock,
+  exercise: ExerciseBlock,
+  assessment: AssessmentBlock,
 };
 
 export const LessonRenderer: React.FC<LessonRendererProps> = ({ content }) => {
@@ -55,3 +59,4 @@ export const LessonRenderer: React.FC<LessonRendererProps> = ({ content }) => {
     </div>
   );
 };
+

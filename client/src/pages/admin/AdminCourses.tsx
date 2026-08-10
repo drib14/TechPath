@@ -17,6 +17,8 @@ import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { Select } from '../../components/ui/Select';
 import { useToast } from '../../components/ui/Toast';
+import { SkeletonAdminTable } from '../../components/ui/Skeleton';
+import { DynamicIcon } from '../../components/ui/DynamicIcon';
 
 export const AdminCourses: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -246,10 +248,7 @@ export const AdminCourses: React.FC = () => {
       {/* Table Container */}
       <div className="bg-surface-900 border border-surface-800 rounded-2xl overflow-hidden shadow-xl">
         {isLoading ? (
-          <div className="p-12 text-center text-surface-400">
-            <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-3" />
-            Loading courses...
-          </div>
+          <SkeletonAdminTable rows={6} cols={6} />
         ) : filteredCourses.length === 0 ? (
           <div className="p-12 text-center text-surface-400">
             No courses found matching criteria. Click "Create Course" to add one.

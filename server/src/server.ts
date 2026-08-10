@@ -6,8 +6,8 @@ const start = async () => {
   await connectDB();
 
   app.listen(Number(env.PORT), () => {
-    console.log(`🚀 TechPath API running on http://localhost:${env.PORT}`);
-    console.log(`📚 Environment: ${env.NODE_ENV}`);
+    console.log(`[TechPath API] Running on http://localhost:${env.PORT}`);
+    console.log(`[TechPath API] Environment: ${env.NODE_ENV}`);
   });
 };
 

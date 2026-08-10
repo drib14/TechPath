@@ -7,8 +7,9 @@ import { env } from '../config/env';
 export class AuthController {
   static async googleAuth(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { credential } = req.body;
-      const { user, token } = await AuthService.googleAuth(credential);
+      const ipAddress = req.ip || req.socket.remoteAddress || '';
+      const userAgent = req.get('user-agent') || '';
+      const { user, token } = await AuthService.googleAuth(credential, ipAddress, userAgent);
 
       // Set HTTP-only cookie
       res.cookie('token', token, {

@@ -7,6 +7,7 @@ import { lessonService } from '../services/lesson.service';
 import { Badge } from '../components/ui/Badge';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { SafeImage } from '../components/ui/SafeImage';
 import { SkeletonLessonContent, SkeletonList } from '../components/ui/Skeleton';
 import { ErrorState } from '../components/ui/ErrorState';
 import type { Technology } from '../types';
@@ -55,24 +56,40 @@ export const CourseDetail: React.FC = () => {
         <span className="text-surface-900 font-medium">{course.title}</span>
       </nav>
 
-      {/* Course Header */}
-      <div className="mb-10">
-        <div className="flex items-center gap-3 mb-3">
-          <Badge variant={difficultyColors[course.difficulty]} size="md">
-            {course.difficulty}
-          </Badge>
+      {/* Course Header with Banner */}
+      <div className="mb-10 grid grid-cols-1 lg:grid-cols-3 gap-8 items-center bg-white border border-surface-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div className="lg:col-span-2">
+          <div className="flex items-center gap-3 mb-3">
+            <Badge variant={difficultyColors[course.difficulty]} size="md">
+              {course.difficulty}
+            </Badge>
+            {parentTech?.name && (
+              <span className="text-xs font-semibold text-primary-600 uppercase tracking-wide">
+                {parentTech.name}
+              </span>
+            )}
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-surface-900 mb-3">{course.title}</h1>
+          <p className="text-base sm:text-lg text-surface-600 mb-6 leading-relaxed">{course.description}</p>
+          <div className="flex items-center gap-6 text-sm text-surface-500">
+            <span className="flex items-center gap-1.5">
+              <BookOpen className="w-4 h-4 text-primary-600" />
+              {modules?.length || 0} modules
+            </span>
+            <span className="flex items-center gap-1.5">
+              <BarChart3 className="w-4 h-4 text-accent-600" />
+              {course.difficulty} level
+            </span>
+          </div>
         </div>
-        <h1 className="text-3xl font-bold text-surface-900 mb-3">{course.title}</h1>
-        <p className="text-lg text-surface-500 mb-4">{course.description}</p>
-        <div className="flex items-center gap-6 text-sm text-surface-500">
-          <span className="flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4" />
-            {modules?.length || 0} modules
-          </span>
-          <span className="flex items-center gap-1.5">
-            <BarChart3 className="w-4 h-4" />
-            {course.difficulty}
-          </span>
+        <div className="lg:col-span-1">
+          <SafeImage
+            src={course.thumbnail}
+            alt={course.title}
+            categoryTitle={parentTech?.name}
+            aspectRatio="video"
+            className="w-full rounded-xl shadow-md border border-surface-200"
+          />
         </div>
       </div>
 

@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { courseService } from '../services/course.service';
 import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
+import { SafeImage } from '../components/ui/SafeImage';
 import { SkeletonGrid } from '../components/ui/Skeleton';
 import { ErrorState } from '../components/ui/ErrorState';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -38,10 +39,13 @@ export const Courses: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
             <Link key={course._id} to={`/courses/${course.slug}`}>
-              <Card hoverable className="h-full">
-                {course.thumbnail && (
-                  <img src={course.thumbnail} alt={course.title} className="w-full h-40 object-cover" />
-                )}
+              <Card hoverable className="h-full flex flex-col">
+                <SafeImage
+                  src={course.thumbnail}
+                  alt={course.title}
+                  aspectRatio="video"
+                  className="w-full h-44"
+                />
                 <CardContent>
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant={difficultyColors[course.difficulty]}>{course.difficulty}</Badge>

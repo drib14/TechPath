@@ -22,6 +22,7 @@ import { technologyService } from '../services/technology.service';
 import { statsService } from '../services/stats.service';
 import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
+import { SafeImage } from '../components/ui/SafeImage';
 import { SkeletonGrid, Skeleton } from '../components/ui/Skeleton';
 import type { Domain, Course, Technology } from '../types';
 
@@ -256,14 +257,13 @@ export const Landing: React.FC = () => {
                 return (
                   <Link key={course._id} to={`/courses/${course.slug}`}>
                     <Card hoverable className="h-full flex flex-col bg-white">
-                      {course.thumbnail && (
-                        <img
-                          src={course.thumbnail}
-                          alt={course.title}
-                          className="w-full h-44 object-cover"
-                          loading="lazy"
-                        />
-                      )}
+                      <SafeImage
+                        src={course.thumbnail}
+                        alt={course.title}
+                        categoryTitle={parentTech?.name || 'TechPath Course'}
+                        aspectRatio="video"
+                        className="w-full h-44"
+                      />
                       <CardContent className="flex-1 flex flex-col">
                         <div className="flex items-center justify-between gap-2 mb-2">
                           <Badge variant={difficultyColors[course.difficulty]}>

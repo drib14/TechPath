@@ -4,11 +4,15 @@ import { queryClient } from './lib/queryClient';
 import { AuthProvider } from './features/auth/AuthContext';
 import { AppRouter } from './routes/AppRouter';
 
+import { ToastProvider } from './components/ui/Toast';
+
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppRouter />
+        <ToastProvider>
+          <AppRouter />
+        </ToastProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -7,3 +7,4 @@ export { Lesson } from './Lesson';
 export { Exercise } from './Exercise';
 export { Assessment } from './Assessment';
 export { Progress } from './Progress';
+export { AuditLog } from './AuditLog';

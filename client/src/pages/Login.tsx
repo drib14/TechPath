@@ -7,20 +7,19 @@ import { TechPathIcon } from '../components/TechPathLogo';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 export const Login: React.FC = () => {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate('/dashboard', { replace: true });
+      navigate(isAdmin ? '/admin' : '/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isAdmin, navigate]);
 
   const handleSuccess = async (credentialResponse: any) => {
     try {
       if (credentialResponse.credential) {
         await login(credentialResponse.credential);
-        navigate('/dashboard');
       }
     } catch (err) {
       console.error('Login failed:', err);

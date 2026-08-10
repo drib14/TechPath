@@ -1,14 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { AuthRequest, JwtPayload, UserRole } from '../types';
 import { ApiError } from '../utils/ApiError';
+import { User } from '../models/User';
 
-export const authenticate = (
+const isConfiguredAdmin = (email: string): boolean => {
+  if (!env.ADMIN_EMAILS) return false;
+  const adminEmails = env.ADMIN_EMAILS.split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return adminEmails.includes(email.trim().toLowerCase());
+};
+
+export const authenticate = async (
   req: AuthRequest,
   _res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   try {
     const token = req.cookies?.token;
 
@@ -17,9 +26,34 @@ export const authenticate = (
     }
 
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+
+    // Fetch fresh user from DB to verify active status and current role
+    const user = await User.findById(decoded.userId).select('role email name avatar');
+    if (!user) {
+      throw ApiError.unauthorized('User not found');
+    }
+
+    let role = user.role;
+
+    // Auto-promote if in ADMIN_EMAILS or if there are zero existing admins in system
+    if (isConfiguredAdmin(user.email)) {
+      if (role !== 'ADMIN') {
+        user.role = 'ADMIN';
+        await user.save();
+        role = 'ADMIN';
+      }
+    } else {
+      const adminCount = await User.countDocuments({ role: 'ADMIN' });
+      if (adminCount === 0) {
+        user.role = 'ADMIN';
+        await user.save();
+        role = 'ADMIN';
+      }
+    }
+
     req.user = {
-      userId: decoded.userId,
-      role: decoded.role,
+      userId: user._id.toString(),
+      role,
     };
 
     next();
@@ -32,20 +66,23 @@ export const authenticate = (
   }
 };
 
-export const optionalAuth = (
+export const optionalAuth = async (
   req: AuthRequest,
   _res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   try {
     const token = req.cookies?.token;
 
     if (token) {
       const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
-      req.user = {
-        userId: decoded.userId,
-        role: decoded.role,
-      };
+      const user = await User.findById(decoded.userId).select('role email');
+      if (user) {
+        req.user = {
+          userId: user._id.toString(),
+          role: user.role,
+        };
+      }
     }
 
     next();

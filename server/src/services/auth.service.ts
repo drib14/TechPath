@@ -3,11 +3,20 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 import { env } from '../config/env';
 import { ApiError } from '../utils/ApiError';
+import { AuditService } from './audit.service';
 
 const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 
 export class AuthService {
-  static async googleAuth(credential: string) {
+  private static isConfiguredAdmin(email: string): boolean {
+    if (!env.ADMIN_EMAILS) return false;
+    const adminEmails = env.ADMIN_EMAILS.split(',')
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean);
+    return adminEmails.includes(email.trim().toLowerCase());
+  }
+
+  static async googleAuth(credential: string, ipAddress?: string, userAgent?: string) {
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: env.GOOGLE_CLIENT_ID,
@@ -24,21 +33,38 @@ export class AuthService {
       throw ApiError.unauthorized('Google account missing required information');
     }
 
+    const shouldBeAdmin = this.isConfiguredAdmin(email);
+
     let user = await User.findOne({ googleId });
 
     if (!user) {
-      user = await User.create({
-        email,
-        name: name || email.split('@')[0],
-        avatar: picture || '',
-        googleId,
-        role: 'USER',
-      });
+      // Also check by email in case seeded or created previously
+      user = await User.findOne({ email: email.toLowerCase() });
+      if (user) {
+        user.googleId = googleId;
+        user.name = name || user.name;
+        user.avatar = picture || user.avatar;
+        if (shouldBeAdmin && user.role !== 'ADMIN') {
+          user.role = 'ADMIN';
+        }
+        await user.save();
+      } else {
+        user = await User.create({
+          email: email.toLowerCase(),
+          name: name || email.split('@')[0],
+          avatar: picture || '',
+          googleId,
+          role: shouldBeAdmin ? 'ADMIN' : 'USER',
+        });
+      }
     } else {
       // Update profile info from Google on each login
       user.name = name || user.name;
       user.avatar = picture || user.avatar;
-      user.email = email;
+      user.email = email.toLowerCase();
+      if (shouldBeAdmin && user.role !== 'ADMIN') {
+        user.role = 'ADMIN';
+      }
       await user.save();
     }
 
@@ -47,6 +73,19 @@ export class AuthService {
       env.JWT_SECRET,
       { expiresIn: '7d' }
     );
+
+    // Audit log login
+    await AuditService.log({
+      userId: user._id,
+      userName: user.name,
+      userEmail: user.email,
+      action: 'LOGIN',
+      resourceType: 'User',
+      resourceId: user._id.toString(),
+      details: `${user.name} (${user.email}) logged in with role ${user.role}`,
+      ipAddress,
+      userAgent,
+    });
 
     return { user, token };
   }
